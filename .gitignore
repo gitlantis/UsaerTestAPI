@@ -1,0 +1,7 @@
+**/bin
+**/obj
+**/publish
+**/.vs
+**/dist
+**/Migrations
+**/appsettings.json
