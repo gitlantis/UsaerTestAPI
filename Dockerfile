@@ -9,4 +9,5 @@ WORKDIR /App
 
 COPY --from=build-env /App/out .
 
+
 ENTRYPOINT ["dotnet", "UserTestAPI.dll"]
