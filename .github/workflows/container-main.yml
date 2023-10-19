@@ -21,3 +21,7 @@ jobs:
           context: .
           push: true
           tags: gitlantis/user-test-api-main:latest, gitlantis/user-test-api-main:${{github.run_number}}
+      - name: Send Webhook
+        run: |
+          WEBHOOK_URL=${{ vars.WEBHOOK_URL }}
+          curl -X POST -H "Content-Type: application/json" -d '{"message": "GitHub workflow completed!"}' $WEBHOOK_URL
