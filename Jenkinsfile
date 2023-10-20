@@ -1,7 +1,7 @@
 pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('itlantis-dockerhub')
-        withCredentials([file(credentialsId: appsettings_json, variable: 'SECRET_FILE_PATH')]){
+        withCredentials([file(credentialsId: 'appsettings_json', variable: 'SECRET_FILE_PATH')]){
             SECRETFILEPATH = SECRET_FILE_PATH
         }
         
