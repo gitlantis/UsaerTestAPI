@@ -13,7 +13,7 @@ pipeline {
             }
             steps {
                 script {
-                    SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
+                    SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 }
                 sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW 
@@ -33,7 +33,7 @@ pipeline {
             }
             steps {
                 script {
-                    SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
+                    SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 }
                 sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW 
