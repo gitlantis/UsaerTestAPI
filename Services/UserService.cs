@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using System.Configuration;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace UserTestMonnitorAPI.Services
 {
@@ -217,5 +219,10 @@ namespace UserTestMonnitorAPI.Services
             }
         }
 
+        public string GetConfig()
+        {
+            string appSettingsJson = File.ReadAllText("appsettings.json");            
+            return appSettingsJson;
+        }
     }
 }

@@ -1,6 +1,8 @@
+ARG GO_VERSION=appsettings.json
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 WORKDIR /App
 COPY . ./
+RUN echo "$APPSETTINGS" > appsettings.json
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
