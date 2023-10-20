@@ -16,10 +16,8 @@ pipeline {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 }
                 sh '''
-                    echo $DOCKERHUB_CREDENTIALS_PSW 
-                    echo $DOCKERHUB_CREDENTIALS_USR 
+                    docker login -u \$DOCKERHUB_CREDENTIALS_USR -p \$DOCKERHUB_CREDENTIALS_PSW --password-stdin
                     docker build -t gitlantis/user-test-api-dev:latest -f Dockerfile .
-                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker push gitlantis/user-test-api-dev:latest 
                     docker logout
                     echo $SECRET_FILE_PATH
@@ -37,10 +35,8 @@ pipeline {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 }
                 sh '''
-                    echo $DOCKERHUB_CREDENTIALS_PSW 
-                    echo $DOCKERHUB_CREDENTIALS_USR 
-                    docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile .
-                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                    docker login -u \$DOCKERHUB_CREDENTIALS_USR -p \$DOCKERHUB_CREDENTIALS_PSW --password-stdin
+                    docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile .                    
                     docker push gitlantis/user-test-api-prod:latest 
                     docker logout
                     echo $SECRET_FILE_PATH
