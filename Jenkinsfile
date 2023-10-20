@@ -4,7 +4,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5'))
     }
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('itlantis-dockerhub')
+        DOCKERHUB_CREDENTIALS = credentials('gitlantis-dockerhub')
     }
     stages {
         stage('Push staging to dockerhub') {
