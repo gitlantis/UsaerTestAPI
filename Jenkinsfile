@@ -1,4 +1,8 @@
 pipeline {
+    agent {lebel 'linux'}
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('itlantis-dockerhub')
     }
