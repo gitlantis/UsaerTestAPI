@@ -34,15 +34,15 @@ pipeline {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 }
-                sh '''
-                    echo \${DOCKERHUB_CREDENTIALS_PSW} | docker login -u \${DOCKERHUB_CREDENTIALS_USR} --password-stdin
-                    docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile .                    
-                    docker push gitlantis/user-test-api-prod:latest 
-                    docker logout
-                    echo $SECRET_FILE_PATH
-                    cat $SECRET_FILE_PATH
-                    docker run --rm -p 5000:5000 -p 80:8080 -e ASPNETCORE_HTTP_PORT=http://+:5000 user-test-api-prod -v $SECRET_FILE_PATH:/App/appsettings.json
-                '''
+                docker.withRegistry('https://registry.hub.docker.com', 'DOCKERHUB_CREDENTIALS') {
+                    sh '''
+                        docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile .                    
+                        docker push gitlantis/user-test-api-prod:latest 
+                        echo $SECRET_FILE_PATH
+                        cat $SECRET_FILE_PATH
+                        docker run --rm -p 5000:5000 -p 80:8080 -e ASPNETCORE_HTTP_PORT=http://+:5000 user-test-api-prod -v $SECRET_FILE_PATH:/App/appsettings.json
+                    '''
+                }
             }
         }        
     }
