@@ -5,9 +5,6 @@ pipeline {
     }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('gitlantis-dockerhub')
-        script {
-            SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
-        }
     }
     stages {
         stage('Push staging to dockerhub') {
@@ -15,6 +12,9 @@ pipeline {
                 branch 'staging'               
             }
             steps {
+                script {
+                    SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
+                }
                 sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW 
                     echo $DOCKERHUB_CREDENTIALS_USR 
@@ -32,6 +32,9 @@ pipeline {
                branch 'main'               
             }
             steps {
+                script {
+                    SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
+                }
                 sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW 
                     echo $DOCKERHUB_CREDENTIALS_USR 
