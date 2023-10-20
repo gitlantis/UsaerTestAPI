@@ -34,7 +34,7 @@ pipeline {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKERHUB_CREDENTIALS') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'gitlantis-dockerhub') {
                         sh '''
                             docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile .                    
                             docker push gitlantis/user-test-api-prod:latest 
