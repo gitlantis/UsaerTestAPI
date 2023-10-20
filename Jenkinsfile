@@ -10,7 +10,6 @@ pipeline {
             steps {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
-
                     docker build -t gitlantis/user-test-api-dev:latest
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker push docker build -t gitlantis/user-test-api-dev:latest
@@ -27,7 +26,6 @@ pipeline {
             steps {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
-
                     docker build -t gitlantis/user-test-api-prod:latest'
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker push docker build -t gitlantis/user-test-api-prod:latest
