@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
-                    dir(myWorkingDir.replace('\\', '/')) {
+                    dir(SECRET_FILE_PATH.replace('\\', '/')) {
                         sh '''
                             echo $DOCKERHUB_CREDENTIALS_PSW 
                             echo $DOCKERHUB_CREDENTIALS_USR 
@@ -37,7 +37,7 @@ pipeline {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings_json')])
                 
-                    dir(myWorkingDir.replace('\\', '/')) {
+                    dir(SECRET_FILE_PATH.replace('\\', '/')) {
                         sh '''
                             echo $DOCKERHUB_CREDENTIALS_PSW 
                             echo $DOCKERHUB_CREDENTIALS_USR 
