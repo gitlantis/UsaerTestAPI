@@ -1,0 +1,11 @@
+**/bin
+**/obj
+**/publish
+**/.vs
+**/dist
+**/Migrations
+**/appsettings.Development.json
+**/.env
+/appsettings.Development.json
+/.github/workflows/container-stage.yml
+/.github/workflows/container-stage.yml
