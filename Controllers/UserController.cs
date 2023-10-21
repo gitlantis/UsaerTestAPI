@@ -7,6 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.Core.Configuration;
+using System.Xml.Linq;
+using Newtonsoft.Json;
+using System.Configuration;
 
 namespace UserTestMonnitorAPI.Controllers
 {
@@ -69,6 +73,14 @@ namespace UserTestMonnitorAPI.Controllers
         public async Task<IActionResult> UnblockUsers([FromBody] List<Guid?> guids)
         {
             var result = await _userService.BlockUsers(guids, false);
+            return Ok(result);
+        }
+        
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetConfig()
+        {
+            var result = _userService.GetConfig();
             return Ok(result);
         }
     }
