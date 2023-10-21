@@ -18,7 +18,7 @@ pipeline {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         
                         sh '''
-                            ANCESTOR_CKECK =$(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
+                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
                             if [ $ANCESTOR_CKECK ]; then
                                 docker stop $ANCESTOR_CKECK
                             fi
@@ -28,7 +28,8 @@ pipeline {
                             docker logout
                             cp $SECRET_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
-                            docker run -d -p 8081:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-dev:latest 
+                            docker run -d -p 8081:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-dev:latest
+                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-dev:latest)
                             docker cp $APPSETTINGS $ANCESTOR_CKECK:/App/appsettings.json
                         '''
                     }
@@ -43,7 +44,7 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         sh '''
-                            ancestor_check=$(docker ps -q --filter ancestor=gitlantis/user-test-api-prod)
+                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-prod)
                             if [ $ANCESTOR_CKECK ]; then
                                 docker stop $ANCESTOR_CKECK
                             fi
@@ -54,6 +55,7 @@ pipeline {
                             cp -f $SECRET_FILE_PATH $PWD
                             chmod 644 $APPSETTINGS
                             docker run -d -p 80:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-prod:latest
+                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-prod:latest)
                             docker cp $APPSETTINGS $ANCESTOR_CKECK:/App/appsettings.json
                         '''
                    }
