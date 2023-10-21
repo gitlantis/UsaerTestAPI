@@ -6,7 +6,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('gitlantis-dockerhub')
         PWD = pwd()
-        APPSETTINGS = $PWD+'/appsettings.json'
+        APPSETTINGS = PWD+'/appsettings.json'
     }
     stages {
         stage('Push staging to dockerhub') {
