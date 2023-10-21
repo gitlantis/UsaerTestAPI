@@ -18,9 +18,9 @@ pipeline {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         
                         sh '''
-                            ancestor_check=$(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
-                            if [ $ancestor_check ]; then
-                                docker stop $ancestor_check
+                            ANCESTOR_CKECK =$(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
+                            if [ $ANCESTOR_CKECK ]; then
+                                docker stop $ANCESTOR_CKECK
                             fi
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-dev:latest -f Dockerfile .
@@ -28,8 +28,8 @@ pipeline {
                             docker logout
                             cp $SECRET_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
-                            docker run -d -p 8081:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-dev:latest -v $APPSETTINGS:appsettings.json
-                            docker cp $APPSETTINGS $ancestor_check:/App/appsettings.json
+                            docker run -d -p 8081:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-dev:latest 
+                            docker cp $APPSETTINGS $ANCESTOR_CKECK:/App/appsettings.json
                         '''
                     }
                 }
@@ -44,8 +44,8 @@ pipeline {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         sh '''
                             ancestor_check=$(docker ps -q --filter ancestor=gitlantis/user-test-api-prod)
-                            if [ $ancestor_check ]; then
-                                docker stop $ancestor_check
+                            if [ $ANCESTOR_CKECK ]; then
+                                docker stop $ANCESTOR_CKECK
                             fi
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile . 
@@ -53,8 +53,8 @@ pipeline {
                             docker logout
                             cp -f $SECRET_FILE_PATH $PWD
                             chmod 644 $APPSETTINGS
-                            docker run -d -p 80:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-prod:latest -v $APPSETTINGS:appsettings.json
-                            docker cp $APPSETTINGS $ancestor_check:/App/appsettings.json
+                            docker run -d -p 80:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-prod:latest
+                            docker cp $APPSETTINGS $ANCESTOR_CKECK:/App/appsettings.json
                         '''
                    }
                 }
