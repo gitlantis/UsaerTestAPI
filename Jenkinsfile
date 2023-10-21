@@ -34,6 +34,14 @@ pipeline {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 }
+                                withCredentials([usernamePassword(credentialsId: 'gitlantis-dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                   sh '''
+                      echo $USERNAME > tmp
+                      echo $PASSWORD >> tmp
+                    '''
+                  }
+                  sh 'cat tmp'
+
                 sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile .                    
