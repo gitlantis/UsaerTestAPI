@@ -18,7 +18,7 @@ pipeline {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         
                         sh '''
-                            cp $SECURE_FILE_PATH $PWD   
+                            cp SECRET_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-dev:latest -f Dockerfile .
