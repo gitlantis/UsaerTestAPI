@@ -20,7 +20,11 @@ pipeline {
                         sh '''
                             cp SECRET_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
-                            docker stop $(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
+                            if [[ $(docker ps -q --filter ancestor=gitlantis/user-test-api-dev) ]]; then
+                                docker stop $(docker ps -q --filter ancestor=myapp)
+                            else
+                                echo "No containers to stop."
+                            fi
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-dev:latest -f Dockerfile .
                             docker push gitlantis/user-test-api-dev:latest 
@@ -41,7 +45,11 @@ pipeline {
                         sh '''
                             cp -f $SECRET_FILE_PATH $PWD
                             chmod 644 $APPSETTINGS
-                            docker stop $(docker ps -q --filter ancestor=gitlantis/user-test-api-prod)
+                            if [[ $(docker ps -q --filter ancestor=gitlantis/user-test-api-prod) ]]; then
+                                docker stop $(docker ps -q --filter ancestor=myapp)
+                            else
+                                echo "No containers to stop."
+                            fi
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile . 
                             docker push gitlantis/user-test-api-prod:latest 
