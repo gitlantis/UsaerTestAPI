@@ -18,7 +18,7 @@ pipeline {
                         
                         sh '''
                             cp $SECURE_FILE_PATH $PWD   
-                            chmod 440 $PWD/appsettings.json
+                            chmod 644 $PWD/appsettings.json
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-dev:latest -f Dockerfile .
                             docker push gitlantis/user-test-api-dev:latest 
@@ -38,7 +38,7 @@ pipeline {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         sh '''
                             cp $SECRET_FILE_PATH $PWD   
-                            chmod 440 $PWD/appsettings.json
+                            chmod 644 $PWD/appsettings.json
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile . 
                             docker push gitlantis/user-test-api-prod:latest 
