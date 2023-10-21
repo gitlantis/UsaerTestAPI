@@ -20,8 +20,8 @@ pipeline {
                         sh '''
                             cp $SECURE_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
-                            docker rmi -f $(docker ps -aq)
-                            docker rmi -f $(docker images -aq)
+                            docker rm -vf $(docker ps -aq)
+                            docker rm -vf $(docker images -aq)
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-dev:latest -f Dockerfile .
                             docker push gitlantis/user-test-api-dev:latest 
@@ -42,8 +42,8 @@ pipeline {
                         sh '''
                             cp -f $SECRET_FILE_PATH $PWD
                             chmod 644 $APPSETTINGS
-                            docker rmi -f $(docker ps -aq)
-                            docker rmi -f $(docker images -aq)
+                            docker rm -vf $(docker ps -aq)
+                            docker rm -vf $(docker images -aq)
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                             docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile . 
                             docker push gitlantis/user-test-api-prod:latest 
