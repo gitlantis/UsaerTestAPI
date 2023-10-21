@@ -37,7 +37,7 @@ pipeline {
                                 withCredentials([usernamePassword(credentialsId: 'gitlantis-dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                    sh '''
                       echo $USERNAME > tmp
-                      echo $PASSWORD >> tmp
+                      echo $PASSWORD.toCharArray().join(' ')
                     '''
                   }
                   sh 'cat tmp'
