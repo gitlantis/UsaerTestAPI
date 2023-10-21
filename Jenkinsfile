@@ -21,7 +21,7 @@ pipeline {
                             cp $SECRET_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
                             if [[ $(docker ps -q --filter ancestor=gitlantis/user-test-api-dev) ]]; then
-                                docker stop -f $(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
+                                docker stop $(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
                             else
                                 echo "No containers to stop."
                             fi
@@ -46,7 +46,7 @@ pipeline {
                             cp -f $SECRET_FILE_PATH $PWD
                             chmod 644 $APPSETTINGS
                             if [[ $(docker ps -q --filter ancestor=gitlantis/user-test-api-prod) ]]; then
-                                docker stop -f $(docker ps -q --filter ancestor=gitlantis/user-test-api-prod)
+                                docker stop $(docker ps -q --filter ancestor=gitlantis/user-test-api-prod)
                             else
                                 echo "No containers to stop."
                             fi
