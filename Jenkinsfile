@@ -34,19 +34,22 @@ pipeline {
                 script {
                     SECRET_FILE_PATH = credentials([file(credentialsId: 'appsettings.json')])
                 }
-                                withCredentials([usernamePassword(credentialsId: 'gitlantis-dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                   sh '''
-                      echo $USERNAME > tmp
-                      echo $PASSWORD.toCharArray().join(' ')
-                    '''
-                  }
-                  sh 'cat tmp'
+            withCredentials([
+            usernamePassword(credentialsId: 'gitlantis-dockerhub',
+              usernameVariable: 'username',
+              passwordVariable: 'password')
+          ]) {
+            print 'username=' + username + 'password=' + password
+
+            print 'username.collect { it }=' + username.collect { it }
+            print 'password.collect { it }=' + password.collect { it }
+          }
+            print 'username=' + username + 'password=' + password
+
 
                 sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile .                    
-                    echo $SECRET_FILE_PATH
-                    cat $SECRET_FILE_PATH
                     docker run --rm -p 5000:5000 -p 80:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-prod:latest -v $SECRET_FILE_PATH:/App/appsettings.json 
                 '''
             }
