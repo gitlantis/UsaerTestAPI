@@ -29,6 +29,7 @@ pipeline {
                             cp $SECRET_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
                             docker run -d -p 8081:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-dev:latest -v $APPSETTINGS:appsettings.json
+                            docker cp $APPSETTINGS $ancestor_check:/App/appsettings.json
                         '''
                     }
                 }
@@ -53,6 +54,7 @@ pipeline {
                             cp -f $SECRET_FILE_PATH $PWD
                             chmod 644 $APPSETTINGS
                             docker run -d -p 80:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-prod:latest -v $APPSETTINGS:appsettings.json
+                            docker cp $APPSETTINGS $ancestor_check:/App/appsettings.json
                         '''
                    }
                 }
