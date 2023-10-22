@@ -25,6 +25,7 @@ pipeline {
                             for N in $ANCESTOR_CKECK
                             do
                                 docker stop $N
+                                docker rm $N
                             done
                             
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
@@ -57,6 +58,7 @@ pipeline {
                             for N in $ANCESTOR_CKECK
                             do
                                 docker stop $N
+                                docker rm $N
                             done
 
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
