@@ -18,8 +18,8 @@ pipeline {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         
                         sh '''
-                            CONTAINER_NAME = user-test-api-dev
-                            CONTAINER = gitlantis/$CONTAINER_NAME:latest
+                            CONTAINER_NAME=user-test-api-dev
+                            CONTAINER=gitlantis/$CONTAINER_NAME:latest
                             ANCESTOR_CKECK=$(docker ps -q --filter="name=$CONTAINER_NAME")  
                             
                             for N in $ANCESTOR_CKECK
@@ -50,8 +50,8 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         sh '''
-                            CONTAINER_NAME = user-test-api-prod
-                            CONTAINER = gitlantis/$CONTAINER_NAME:latest
+                            CONTAINER_NAME=user-test-api-prod
+                            CONTAINER=gitlantis/$CONTAINER_NAME:latest
                             ANCESTOR_CKECK=$(docker ps -q --filter="name=$CONTAINER_NAME")                            
                             
                             for N in $ANCESTOR_CKECK
