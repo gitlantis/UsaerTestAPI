@@ -18,19 +18,24 @@ pipeline {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         
                         sh '''
-                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-dev)
+                            CONTAINER_NAME = user-test-api-dev
+                            CONTAINER = gitlantis/$CONTAINER_NAME:latest
+                            ANCESTOR_CKECK=$(docker ps -q --filter="name=$CONTAINER_NAME")  
+                            
                             for N in $ANCESTOR_CKECK
                             do
                                 docker stop $N
                             done
+                            
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                            docker build -t gitlantis/user-test-api-dev:latest -f Dockerfile .
-                            docker push gitlantis/user-test-api-dev:latest 
+                            docker build -t $CONTAINER -f Dockerfile .
+                            docker push $CONTAINER 
                             docker logout
+                            
                             cp $SECRET_FILE_PATH $PWD   
                             chmod 644 $APPSETTINGS
-                            docker run -d -p 8081:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-dev:latest
-                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-dev:latest)
+                            docker run --name $CONTAINER_NAME -d -p 8081:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 $CONTAINER
+                            ANCESTOR_CKECK=$(docker ps -q --filter="name=$CONTAINER_NAME")
                             docker cp $APPSETTINGS $ANCESTOR_CKECK:/App/appsettings.json
                         '''
                     }
@@ -45,19 +50,24 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'appsettings.json', variable: 'SECRET_FILE_PATH')]) {
                         sh '''
-                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-prod)
+                            CONTAINER_NAME = user-test-api-prod
+                            CONTAINER = gitlantis/$CONTAINER_NAME:latest
+                            ANCESTOR_CKECK=$(docker ps -q --filter="name=$CONTAINER_NAME")                            
+                            
                             for N in $ANCESTOR_CKECK
                             do
                                 docker stop $N
                             done
+
                             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                            docker build -t gitlantis/user-test-api-prod:latest -f Dockerfile . 
-                            docker push gitlantis/user-test-api-prod:latest 
+                            docker build -t $CONTAINER -f Dockerfile . 
+                            docker push $CONTAINER
                             docker logout
+                            
                             cp -f $SECRET_FILE_PATH $PWD
                             chmod 644 $APPSETTINGS
-                            docker run -d -p 80:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 gitlantis/user-test-api-prod:latest
-                            ANCESTOR_CKECK=$(docker ps -q --filter ancestor=gitlantis/user-test-api-prod:latest)
+                            docker run --name $CONTAINER_NAME -d -p 80:80 -e ASPNETCORE_HTTP_PORT=http://+:5000 $CONTAINER
+                            ANCESTOR_CKECK=$(docker ps -q --filter="name=$CONTAINER_NAME") 
                             docker cp $APPSETTINGS $ANCESTOR_CKECK:/App/appsettings.json
                         '''
                    }
